@@ -1,0 +1,20 @@
+<?php
+    /**
+     * Implementation of hook_menu  ().
+     */
+    include './vk.conf';
+    include './class/vk.api.class.php';
+
+    $VK = new VK_API(__ACCESS_TOKEN__, __SECRET__, 'https://api.vk.com');
+
+    $VK->call ('photos.getAlbums', array('gid' => $gid, 'need_covers' => '1'))->get_response ($response);
+
+    $output = '<div style="display: block;">';
+    foreach ($response as $item) {
+        $output .= '<a target="_blank" href="/album/' . $gid . '/' . $item['aid'] . '" style="margin: 0px;">';
+        $output .= '<img src="' . $item['thumb_src'] . '" style="margin: 0px auto;">';
+        $output .= '</a>';
+    }
+    $output .= '</div>';
+
+    echo $output;
